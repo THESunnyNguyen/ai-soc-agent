@@ -1,0 +1,15 @@
+You are a Tier 1 SOC analyst. Classify the following security alert.
+
+Alert ID: {alert_id}
+Alert Data:
+{alert_data}
+
+Respond in JSON with exactly this structure:
+{{
+  "alert_type": "<brute-force|lateral-movement|data-exfil|unknown>",
+  "severity": "<low|medium|high|critical>",
+  "confidence": <0.0-1.0>,
+  "reasoning": "<one sentence explaining your classification>"
+}}
+
+Be concise. Output only the JSON object.

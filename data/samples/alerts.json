@@ -1,0 +1,198 @@
+{
+  "alerts": [
+    {
+      "id": "alert-001",
+      "type": "brute-force",
+      "severity": "medium",
+      "title": "Multiple failed SSH login attempts",
+      "source_ip": "185.220.101.45",
+      "target_host": "web-prod-01",
+      "target_user": "admin",
+      "timestamp": "2026-04-16T08:14:00Z",
+      "raw": "185 failed SSH auth attempts for user 'admin' on web-prod-01 from 185.220.101.45 between 08:10–08:14 UTC"
+    },
+    {
+      "id": "alert-002",
+      "type": "lateral-movement",
+      "severity": "high",
+      "title": "Suspicious internal RDP connections across multiple hosts",
+      "source_ip": "10.0.1.55",
+      "target_host": "db-prod-01",
+      "target_user": "svc_backup",
+      "timestamp": "2026-04-16T09:32:00Z",
+      "raw": "Host 10.0.1.55 (app-prod-02) initiated RDP sessions to db-prod-01, db-prod-02, and file-server-01 within 4 minutes using service account svc_backup"
+    },
+    {
+      "id": "alert-003",
+      "type": "data-exfil",
+      "severity": "critical",
+      "title": "Large outbound data transfer to unknown external IP",
+      "source_ip": "10.0.1.22",
+      "target_host": "external",
+      "target_user": "jsmith",
+      "timestamp": "2026-04-16T11:05:00Z",
+      "raw": "Host 10.0.1.22 (workstation-jsmith) transferred 4.2GB to 91.108.4.200 over port 443 in a single session. User jsmith has no scheduled data transfer tasks."
+    }
+  ],
+  "events": [
+    {
+      "id": "evt-001-a",
+      "alert_id": "alert-001",
+      "timestamp": "2026-04-16T08:10:00Z",
+      "type": "auth_failure",
+      "host": "web-prod-01",
+      "user": "admin",
+      "source_ip": "185.220.101.45",
+      "message": "SSH authentication failure for user admin from 185.220.101.45 port 54321"
+    },
+    {
+      "id": "evt-001-b",
+      "alert_id": "alert-001",
+      "timestamp": "2026-04-16T08:14:32Z",
+      "type": "auth_failure",
+      "host": "web-prod-01",
+      "user": "root",
+      "source_ip": "185.220.101.45",
+      "message": "SSH authentication failure for user root from 185.220.101.45 — 185 attempts total in 4 minutes"
+    },
+    {
+      "id": "evt-002-a",
+      "alert_id": "alert-002",
+      "timestamp": "2026-04-16T09:32:11Z",
+      "type": "lateral_movement",
+      "host": "app-prod-02",
+      "user": "svc_backup",
+      "source_ip": "10.0.1.55",
+      "message": "RDP session opened from app-prod-02 (10.0.1.55) to db-prod-01 (10.0.2.10) by svc_backup"
+    },
+    {
+      "id": "evt-002-b",
+      "alert_id": "alert-002",
+      "timestamp": "2026-04-16T09:33:44Z",
+      "type": "lateral_movement",
+      "host": "app-prod-02",
+      "user": "svc_backup",
+      "source_ip": "10.0.1.55",
+      "message": "RDP session opened from app-prod-02 to db-prod-02 (10.0.2.11) by svc_backup"
+    },
+    {
+      "id": "evt-002-c",
+      "alert_id": "alert-002",
+      "timestamp": "2026-04-16T09:35:01Z",
+      "type": "lateral_movement",
+      "host": "app-prod-02",
+      "user": "svc_backup",
+      "source_ip": "10.0.1.55",
+      "message": "RDP session opened from app-prod-02 to file-server-01 (10.0.3.5) by svc_backup"
+    },
+    {
+      "id": "evt-003-a",
+      "alert_id": "alert-003",
+      "timestamp": "2026-04-16T11:05:13Z",
+      "type": "data_transfer",
+      "host": "workstation-jsmith",
+      "user": "jsmith",
+      "source_ip": "10.0.1.22",
+      "message": "Outbound HTTPS transfer: 4.2GB from 10.0.1.22 to 91.108.4.200 over 18 minutes"
+    },
+    {
+      "id": "evt-003-b",
+      "alert_id": "alert-003",
+      "timestamp": "2026-04-16T10:58:00Z",
+      "type": "file_access",
+      "host": "workstation-jsmith",
+      "user": "jsmith",
+      "source_ip": "10.0.1.22",
+      "message": "jsmith accessed /shares/finance/Q1-2026-projections.xlsx and 47 other files in /shares/finance/ in 6 minutes"
+    }
+  ],
+  "entity_context": {
+    "185.220.101.45": {
+      "type": "ip",
+      "known_malicious": true,
+      "tags": ["tor-exit-node", "scanner"],
+      "first_seen": "2024-01-15",
+      "notes": "Known Tor exit node. Frequently seen in brute-force campaigns."
+    },
+    "10.0.1.55": {
+      "type": "ip",
+      "known_malicious": false,
+      "tags": ["internal", "app-tier"],
+      "hostname": "app-prod-02",
+      "notes": "Internal application server. svc_backup account normally runs scheduled jobs 02:00–04:00 UTC only."
+    },
+    "10.0.1.22": {
+      "type": "ip",
+      "known_malicious": false,
+      "tags": ["internal", "workstation"],
+      "hostname": "workstation-jsmith",
+      "notes": "Employee workstation. jsmith is a finance analyst. No authorized bulk data transfers on record."
+    },
+    "91.108.4.200": {
+      "type": "ip",
+      "known_malicious": false,
+      "tags": ["external", "unknown"],
+      "notes": "No prior history. Not in allowlist."
+    },
+    "svc_backup": {
+      "type": "user",
+      "account_type": "service",
+      "normal_hours": "02:00-04:00 UTC",
+      "notes": "Service account for scheduled backup jobs. Not authorized for interactive RDP."
+    },
+    "jsmith": {
+      "type": "user",
+      "account_type": "employee",
+      "department": "Finance",
+      "notes": "Finance analyst. Authorized to access /shares/finance/. No approved data transfer tasks."
+    },
+    "web-prod-01": {
+      "type": "host",
+      "role": "web-server",
+      "os": "Ubuntu 22.04",
+      "notes": "Public-facing web server. SSH should only be accessed by ops team from VPN."
+    }
+  },
+  "ip_enrichment": {
+    "185.220.101.45": {
+      "ip": "185.220.101.45",
+      "asn": "AS24940",
+      "org": "Hetzner Online GmbH",
+      "country": "DE",
+      "reputation_score": 92,
+      "categories": ["tor-exit", "brute-force"],
+      "threat_feeds": ["AbuseIPDB", "Spamhaus"],
+      "last_reported": "2026-04-15"
+    },
+    "91.108.4.200": {
+      "ip": "91.108.4.200",
+      "asn": "AS62041",
+      "org": "Telegram Messenger Inc",
+      "country": "NL",
+      "reputation_score": 15,
+      "categories": [],
+      "threat_feeds": [],
+      "last_reported": null
+    },
+    "10.0.1.55": {
+      "ip": "10.0.1.55",
+      "asn": null,
+      "org": "Internal",
+      "country": null,
+      "reputation_score": 0,
+      "categories": ["internal"],
+      "threat_feeds": [],
+      "last_reported": null
+    },
+    "10.0.1.22": {
+      "ip": "10.0.1.22",
+      "asn": null,
+      "org": "Internal",
+      "country": null,
+      "reputation_score": 0,
+      "categories": ["internal"],
+      "threat_feeds": [],
+      "last_reported": null
+    }
+  }
+}
