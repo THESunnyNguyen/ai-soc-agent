@@ -17,6 +17,7 @@ Exposes tools to the agent. Transport selectable via MCP_TRANSPORT env var
 - Abstract interface: `storage/base.py`
 
 ## Requirements
-- MUST support both stdio and HTTP transport
+- Phase 1: stdio transport only; HTTP transport deferred to Phase 2
+- MUST support both stdio and HTTP transport (Phase 2+)
 - MUST validate inputs/outputs with pydantic
 - MUST be independently containerizable

@@ -9,6 +9,7 @@ Orchestrates the 6-step investigation pipeline using the Anthropic SDK.
 3. `investigate.py` — execute investigation steps
 4. `assess.py` — evaluate findings
 5. `summarize.py` — produce human-readable summary
+6. `respond.py` — format adaptive report and surface escalation recommendation
 
 ## State
 - `workflow/state.py` — investigation state dataclass passed between steps
@@ -16,6 +17,7 @@ Orchestrates the 6-step investigation pipeline using the Anthropic SDK.
 
 ## Prompts
 - Stored as plain text files in `prompts/`, one per step
+- All 6 steps MUST have a corresponding prompt template at `agent/prompts/<step_name>.txt`
 
 ## Requirements
 - MUST be independently containerizable
