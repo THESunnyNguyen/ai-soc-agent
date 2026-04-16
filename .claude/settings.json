@@ -1,0 +1,12 @@
+{
+  "enabledPlugins": {
+    "debugging-toolkit@claude-code-workflows": true,
+    "code-documentation@claude-code-workflows": true,
+    "git-pr-workflows@claude-code-workflows": true,
+    "cloud-infrastructure@claude-code-workflows": true,
+    "python-development@claude-code-workflows": true,
+    "cicd-automation@claude-code-workflows": true,
+    "deployment-validation@claude-code-workflows": true,
+    "deployment-strategies@claude-code-workflows": true
+  }
+}
